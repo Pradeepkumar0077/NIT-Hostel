@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - Hostel Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page">
+
+<!-- Navbar -->
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container">
+    <a href="index.html" class="navbar-brand">Hostel Management</a>
+  </div>
+</nav>
+
+<div class="container d-flex align-items-center justify-content-center min-vh-100">
+  <div class="auth-card card shadow-lg p-5" style="max-width: 550px; width: 100%;">
+    <h2 class="text-center mb-4">Create Your Account</h2>
+
+    <form id="signupForm" class="needs-validation">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="firstName" class="form-label">First Name</label>
+          <input class="form-control" id="firstName" type="text" placeholder="First Name" required>
+          <div class="invalid-feedback">First name is required.</div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="lastName" class="form-label">Last Name</label>
+          <input class="form-control" id="lastName" type="text" placeholder="Last Name" required>
+          <div class="invalid-feedback">Last name is required.</div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Email Address</label>
+        <input class="form-control" id="email" type="email" placeholder="your.email@example.com" required>
+        <div class="invalid-feedback">Valid email is required.</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="phone" class="form-label">Phone Number</label>
+        <input class="form-control" id="phone" type="tel" placeholder="10-digit phone number" pattern="[0-9]{10}" required>
+        <div class="invalid-feedback">Valid 10-digit phone number is required.</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="roomPreference" class="form-label">Room Preference</label>
+        <select class="form-select" id="roomPreference" required>
+          <option value="">Select room type...</option>
+          <option value="single">Single (₹60,000/year)</option>
+          <option value="double">Double (₹50,000/year)</option>
+          <option value="triple">Triple (₹40,000/year)</option>
+        </select>
+        <div class="invalid-feedback">Room preference is required.</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="signupPassword" class="form-label">Password</label>
+        <input class="form-control" id="signupPassword" type="password" placeholder="Create a strong password" required>
+        <small class="text-muted">Minimum 6 characters</small>
+        <div class="invalid-feedback">Password must be at least 6 characters.</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="confirmPassword" class="form-label">Confirm Password</label>
+        <input class="form-control" id="confirmPassword" type="password" placeholder="Confirm your password" required>
+        <div class="invalid-feedback">Passwords must match.</div>
+      </div>
+
+      <div class="mb-3 form-check">
+        <input class="form-check-input" id="agree" type="checkbox" required>
+        <label class="form-check-label" for="agree">
+          I agree to the terms and conditions
+        </label>
+        <div class="invalid-feedback">You must agree to the terms.</div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 mb-3">Create Account</button>
+
+      <div id="signupMsg" class="alert d-none" role="alert"></div>
+    </form>
+
+    <hr>
+
+    <p class="text-center">
+      Already have an account? <a href="login.html">Login here</a>
+    </p>
+  </div>
+</div>
+
+<footer class="bg-dark text-white text-center p-4 mt-5">
+  <p>&copy; 2026 Hostel Management. All rights reserved.</p>
+</footer>
+
+<script src="hostel.js"></script>
+<script>
+  // Sign Up Form Handler
+  document.getElementById("signupForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    let firstName = document.getElementById("firstName").value;
+    let lastName = document.getElementById("lastName").value;
+    let email = document.getElementById("email").value;
+    let phone = document.getElementById("phone").value;
+    let password = document.getElementById("signupPassword").value;
+    let confirmPassword = document.getElementById("confirmPassword").value;
+    let msgDiv = document.getElementById("signupMsg");
+
+    // Validate passwords match
+    if (password !== confirmPassword) {
+      msgDiv.className = "alert alert-danger d-block";
+      msgDiv.innerText = "Passwords do not match.";
+      return;
+    }
+
+    // Validate password length
+    if (password.length < 6) {
+      msgDiv.className = "alert alert-danger d-block";
+      msgDiv.innerText = "Password must be at least 6 characters.";
+      return;
+    }
+
+    // Store user data in localStorage
+    let userData = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      phone: phone,
+      roomPreference: document.getElementById("roomPreference").value,
+      signupDate: new Date().toISOString()
+    };
+
+    localStorage.setItem("newUser_" + email, JSON.stringify(userData));
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("username", firstName);
+    localStorage.setItem("userEmail", email);
+
+    msgDiv.className = "alert alert-success d-block";
+    msgDiv.innerText = "Account created successfully! Redirecting to dashboard...";
+
+    setTimeout(() => {
+      window.location.href = "dashboard.html";
+    }, 1500);
+  });
+</script>
+</body>
+</html>
